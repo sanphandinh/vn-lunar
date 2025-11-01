@@ -343,7 +343,7 @@ lunarCLI();
 - ✅ Chrome/Edge 88+
 - ✅ Firefox 78+
 - ✅ Safari 14+
-- ✅ Node.js 20+
+- ✅ Node.js 22+
 - ✅ React Native
 - ✅ Electron
 
@@ -405,7 +405,7 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 
 ### **Development Setup**
 
-**Requirements**: Node.js 20+ and pnpm 8+
+**Requirements**: Node.js 22+ and pnpm 8+
 
 ```bash
 git clone https://github.com/sanphandinh/vn-lunar

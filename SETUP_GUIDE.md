@@ -7,7 +7,7 @@ This guide will help you set up the automated npm publishing workflow for your V
 - ✅ GitHub repository already exists
 - ✅ NPM account created
 - ✅ Admin access to the GitHub repository
-- ✅ **Node.js 20+** installed locally
+- ✅ **Node.js 22+** installed locally
 - ✅ **pnpm 8+** installed locally (`npm install -g pnpm`)
 
 ## 🎯 Step 1: Generate NPM Token
@@ -147,9 +147,18 @@ No workflows running after PR creation
 npm run build fails in CI but works locally
 ```
 **Solution**:
-- Run `npm ci` instead of `npm install` locally to test
-- Check Node.js version compatibility
+- Run `pnpm install` locally to test
+- Check Node.js version compatibility (requires 22+ for CI)
 - Verify all dependencies are in package.json
+
+#### 6. Semantic Release Version Requirements
+```
+semantic-release: node version ^22.14.0 || >= 24.10.0 is required
+```
+**Solution**:
+- Ensure local Node.js version is 22.14.0+ or 24.10.0+
+- Update to latest Node.js: `nvm install 22 && nvm use 22`
+- Check semantic-release version compatibility
 
 #### 4. Version Conflicts
 ```
