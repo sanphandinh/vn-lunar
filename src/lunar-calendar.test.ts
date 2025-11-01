@@ -21,6 +21,94 @@ describe('LunarCalendar Class', () => {
       expect(calendar.lunarDate.year).toBe(2024);
       expect(calendar.solarDate.year).toBeGreaterThan(0);
     });
+
+    // Input validation tests
+    it('should throw error for non-integer day', () => {
+      expect(() => new LunarCalendar(10.5, 2, 2024, false)).toThrow('Day, month, and year must be integers');
+    });
+
+    it('should throw error for non-integer month', () => {
+      expect(() => new LunarCalendar(10, 2.5, 2024, false)).toThrow('Day, month, and year must be integers');
+    });
+
+    it('should throw error for non-integer year', () => {
+      expect(() => new LunarCalendar(10, 2, 2024.5, false)).toThrow('Day, month, and year must be integers');
+    });
+
+    it('should throw error for day less than 1', () => {
+      expect(() => new LunarCalendar(0, 2, 2024, false)).toThrow('Day must be between 1 and 31');
+    });
+
+    it('should throw error for day greater than 31', () => {
+      expect(() => new LunarCalendar(32, 2, 2024, false)).toThrow('Day must be between 1 and 31');
+    });
+
+    it('should throw error for month less than 1', () => {
+      expect(() => new LunarCalendar(10, 0, 2024, false)).toThrow('Month must be between 1 and 12');
+    });
+
+    it('should throw error for month greater than 12', () => {
+      expect(() => new LunarCalendar(10, 13, 2024, false)).toThrow('Month must be between 1 and 12');
+    });
+
+    it('should throw error for year less than 1200', () => {
+      expect(() => new LunarCalendar(10, 2, 1199, false)).toThrow('Year must be between 1200 and 2199');
+    });
+
+    it('should throw error for year greater than 2199', () => {
+      expect(() => new LunarCalendar(10, 2, 2200, false)).toThrow('Year must be between 1200 and 2199');
+    });
+
+    it('should throw error for invalid February date (non-leap year)', () => {
+      expect(() => new LunarCalendar(29, 2, 2023, false)).toThrow('Invalid date: 29/2/2023. Month 2 has only 28 days.');
+    });
+
+    it('should throw error for invalid February date (leap year)', () => {
+      expect(() => new LunarCalendar(30, 2, 2024, false)).toThrow('Invalid date: 30/2/2024. Month 2 has only 29 days.');
+    });
+
+    it('should accept valid February 29 in leap year', () => {
+      expect(() => new LunarCalendar(29, 2, 2024, false)).not.toThrow();
+    });
+
+    it('should throw error for April 31', () => {
+      expect(() => new LunarCalendar(31, 4, 2024, false)).toThrow('Invalid date: 31/4/2024. Month 4 has only 30 days.');
+    });
+
+    it('should throw error for June 31', () => {
+      expect(() => new LunarCalendar(31, 6, 2024, false)).toThrow('Invalid date: 31/6/2024. Month 6 has only 30 days.');
+    });
+
+    it('should throw error for September 31', () => {
+      expect(() => new LunarCalendar(31, 9, 2024, false)).toThrow('Invalid date: 31/9/2024. Month 9 has only 30 days.');
+    });
+
+    it('should throw error for November 31', () => {
+      expect(() => new LunarCalendar(31, 11, 2024, false)).toThrow('Invalid date: 31/11/2024. Month 11 has only 30 days.');
+    });
+
+    it('should accept valid 31-day months', () => {
+      expect(() => new LunarCalendar(31, 1, 2024, false)).not.toThrow(); // January
+      expect(() => new LunarCalendar(31, 3, 2024, false)).not.toThrow(); // March
+      expect(() => new LunarCalendar(31, 5, 2024, false)).not.toThrow(); // May
+      expect(() => new LunarCalendar(31, 7, 2024, false)).not.toThrow(); // July
+      expect(() => new LunarCalendar(31, 8, 2024, false)).not.toThrow(); // August
+      expect(() => new LunarCalendar(31, 10, 2024, false)).not.toThrow(); // October
+      expect(() => new LunarCalendar(31, 12, 2024, false)).not.toThrow(); // December
+    });
+
+    it('should accept valid 30-day months', () => {
+      expect(() => new LunarCalendar(30, 4, 2024, false)).not.toThrow(); // April
+      expect(() => new LunarCalendar(30, 6, 2024, false)).not.toThrow(); // June
+      expect(() => new LunarCalendar(30, 9, 2024, false)).not.toThrow(); // September
+      expect(() => new LunarCalendar(30, 11, 2024, false)).not.toThrow(); // November
+    });
+
+    // Note: Lunar dates don't have the same validation, so these should work
+    it('should allow invalid dates when isLunar is true (lunar dates have different rules)', () => {
+      expect(() => new LunarCalendar(30, 2, 2024, true)).not.toThrow(); // Lunar Feb 30 is valid
+      expect(() => new LunarCalendar(31, 4, 2024, true)).not.toThrow(); // Lunar April 31 might be valid in some years
+    });
   });
 
   describe('Static Methods', () => {

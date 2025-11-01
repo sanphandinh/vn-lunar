@@ -25,13 +25,15 @@ export function jdn(day: number, month: number, year: number): number {
   const a = INT((14 - month) / 12);
   const y = year + 4800 - a;
   const m = month + 12 * a - 3;
-  let jd = day + INT((153 * m + 2) / 5) + 365 * y + INT(y / 4) - INT(y / 100) + INT(y / 400) - 32045;
-  
-  if (jd < 2299161) {
-    jd = day + INT((153 * m + 2) / 5) + 365 * y + INT(y / 4) - 32083;
+
+  // Use appropriate formula based on the input date, not calculated result
+  if (year < 1582 || (year === 1582 && (month < 10 || (month === 10 && day < 15)))) {
+    // Julian calendar (before Gregorian reform)
+    return day + INT((153 * m + 2) / 5) + 365 * y + INT(y / 4) - 32083;
+  } else {
+    // Gregorian calendar (after Gregorian reform)
+    return day + INT((153 * m + 2) / 5) + 365 * y + INT(y / 4) - INT(y / 100) + INT(y / 400) - 32045;
   }
-  
-  return jd;
 }
 
 /**
@@ -64,6 +66,15 @@ export function jdn2date(jd: number): [number, number, number, number] {
  * Decode lunar year information
  */
 export function decodeLunarYear(year: number, k: number): LunarDate[] {
+  // Validate inputs
+  if (year < 1200 || year > 2199) {
+    throw new Error(`Year ${year} is not supported. Supported range: 1200-2199`);
+  }
+
+  if (k === 0) {
+    throw new Error(`Invalid year code: 0 for year ${year}`);
+  }
+
   const monthLengths = [29, 30];
   const regularMonths: number[] = new Array(12);
   const offsetOfTet = k >> 17;

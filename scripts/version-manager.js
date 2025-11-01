@@ -143,7 +143,7 @@ function createVersionSection(version, date, changes) {
 
 // Interactive version release
 async function interactiveRelease() {
-  console.log('🚀 @dqcai/logger Version Release Manager\n');
+  console.log('🚀 @sanphandinh/vn-lunar Version Release Manager\n');
   
   const currentVersion = getCurrentVersion();
   console.log(`📦 Current version: ${currentVersion}`);
@@ -232,8 +232,8 @@ async function interactiveRelease() {
       execSync('npm publish --access public', { stdio: 'inherit' });
       
       console.log('\n✅ Release completed successfully!');
-      console.log(`🎉 @dqcai/logger v${nextVersion} is now available on NPM`);
-      console.log(`📦 https://www.npmjs.com/package/@dqcai/logger/v/${nextVersion}`);
+      console.log(`🎉 @sanphandinh/vn-lunar v${nextVersion} is now available on NPM`);
+      console.log(`📦 https://www.npmjs.com/package/@sanphandinh/vn-lunar/v/${nextVersion}`);
     } else {
       console.log('\n✅ Version created successfully!');
       console.log('📝 Run `npm publish --access public` when ready to publish');
@@ -293,7 +293,7 @@ async function main() {
       break;
       
     default:
-      console.log('📚 @dqcai/logger Version Manager');
+      console.log('📚 @sanphandinh/vn-lunar Version Manager');
       console.log('\nUsage:');
       console.log('  npm run version:release     # Interactive release');
       console.log('  npm run version:check       # Check unreleased changes');  

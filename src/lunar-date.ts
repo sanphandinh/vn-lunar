@@ -1,5 +1,5 @@
 // src/lunar-date.ts
-import type { LunarDateInfo, SolarDateInfo } from './types';
+import type { LunarDateInfo } from './types';
 
 export class LunarDate implements LunarDateInfo {
   public day: number;
@@ -27,8 +27,8 @@ export class LunarDate implements LunarDateInfo {
 
   equals(other: LunarDate): boolean {
     return this.day === other.day &&
-           this.month === other.month &&
-           this.year === other.year &&
-           this.leap === other.leap;
+      this.month === other.month &&
+      this.year === other.year &&
+      this.leap === other.leap;
   }
 }

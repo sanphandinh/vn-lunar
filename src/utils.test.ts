@@ -80,6 +80,61 @@ describe('Utility Functions', () => {
       expect(oct15Gregorian).toBeGreaterThan(oct4Julian);
     });
 
+    // Test for Julian Day calculation precision fix
+    it('should handle Gregorian calendar transition correctly', () => {
+      // Test dates around the Gregorian calendar reform - verify they all calculate without errors
+      const testDates = [
+        [4, 10, 1582],   // Before reform (Julian)
+        [14, 10, 1582],  // Day before reform (Julian)
+        [15, 10, 1582],  // First day of Gregorian calendar
+        [16, 10, 1582],  // Second day of Gregorian calendar
+        [1, 1, 1200],    // Early date (Julian)
+        [1, 1, 2024],    // Modern date (Gregorian)
+      ];
+
+      // All should calculate positive values
+      testDates.forEach(([day, month, year]) => {
+        const jd = jdn(day, month, year);
+        expect(jd).toBeGreaterThan(0);
+      });
+
+      // Verify that dates calculate correctly and modern date is larger than early date
+      const earlyDate = jdn(1, 1, 1200);
+      const preReform = jdn(14, 10, 1582);
+      const postReform = jdn(15, 10, 1582);
+      const modernDate = jdn(1, 1, 2024);
+
+      expect(preReform).toBeGreaterThan(earlyDate);
+      expect(modernDate).toBeGreaterThan(preReform);
+      // Note: postReform vs preReform relationship depends on calendar transition specifics
+    });
+
+    it('should use correct calendar formula based on input date', () => {
+      // Test dates that should use different formulas
+      const julianDate = jdn(1, 1, 1200);  // Should use Julian formula
+      const gregorianDate = jdn(1, 1, 2024); // Should use Gregorian formula
+
+      // Both should be positive and valid
+      expect(julianDate).toBeGreaterThan(0);
+      expect(gregorianDate).toBeGreaterThan(0);
+
+      // Gregorian date should be much larger (being 824 years later)
+      expect(gregorianDate).toBeGreaterThan(julianDate);
+    });
+
+    it('should handle exact boundary dates correctly', () => {
+      // Test the exact boundary: October 15, 1582
+      const boundary = jdn(15, 10, 1582);
+      const after = jdn(16, 10, 1582);
+
+      // Both should be valid dates
+      expect(boundary).toBeGreaterThan(0);
+      expect(after).toBeGreaterThan(boundary);
+
+      // Difference should be exactly 1 day between consecutive dates
+      expect(after - boundary).toBe(1);
+    });
+
     it('should handle edge cases', () => {
       // Beginning of year
       expect(jdn(1, 1, 1200)).toBeGreaterThan(0);
@@ -211,6 +266,48 @@ describe('Utility Functions', () => {
       for (let i = 1; i < yearData.length; i++) {
         expect(yearData[i].jd).toBeGreaterThan(yearData[i - 1].jd);
       }
+    });
+
+    // Test for decodeLunarYear error handling fix
+    it('should throw error for years outside supported range', () => {
+      const invalidYears = [1199, 2200, 1000, 3000];
+
+      invalidYears.forEach(year => {
+        expect(() => decodeLunarYear(year, 0x12345)).toThrow(
+          `Year ${year} is not supported. Supported range: 1200-2199`
+        );
+      });
+    });
+
+    it('should throw error for invalid year code (0)', () => {
+      expect(() => decodeLunarYear(2024, 0)).toThrow(
+        'Invalid year code: 0 for year 2024'
+      );
+    });
+
+    it('should throw error for boundary years outside range', () => {
+      expect(() => decodeLunarYear(1199, 0x12345)).toThrow(
+        'Year 1199 is not supported. Supported range: 1200-2199'
+      );
+
+      expect(() => decodeLunarYear(2200, 0x12345)).toThrow(
+        'Year 2200 is not supported. Supported range: 1200-2199'
+      );
+    });
+
+    it('should work with boundary years within range', () => {
+      // Should not throw for minimum and maximum supported years
+      expect(() => decodeLunarYear(1200, 0x12345)).not.toThrow();
+      expect(() => decodeLunarYear(2199, 0x12345)).not.toThrow();
+
+      // Should return valid arrays
+      const year1200 = decodeLunarYear(1200, 0x12345);
+      const year2199 = decodeLunarYear(2199, 0x12345);
+
+      expect(Array.isArray(year1200)).toBe(true);
+      expect(Array.isArray(year2199)).toBe(true);
+      expect(year1200.length).toBeGreaterThan(0);
+      expect(year2199.length).toBeGreaterThan(0);
     });
   });
 

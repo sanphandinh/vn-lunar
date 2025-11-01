@@ -1,15 +1,48 @@
 // src/lunar-calendar.ts
 import { LunarDate } from './lunar-date';
 import { getLunarDate, getSolarDate, getYearCanChi, getDayCanChi, getMonthCanChi } from './core';
-import { TUAN, TIET_KHI } from './constants';
+import { TUAN } from './constants';
 import { jdn } from './utils';
-import type { LunarDateInfo, SolarDateInfo } from './types';
+import type { SolarDateInfo } from './types';
 
 export class LunarCalendar {
   private _lunarDate: LunarDate;
   private _solarDate: SolarDateInfo;
 
   constructor(day: number, month: number, year: number, isLunar: boolean = false) {
+    // Basic input validation
+    if (!Number.isInteger(day) || !Number.isInteger(month) || !Number.isInteger(year)) {
+      throw new Error('Day, month, and year must be integers');
+    }
+
+    if (day < 1 || day > 31) {
+      throw new Error('Day must be between 1 and 31');
+    }
+
+    if (month < 1 || month > 12) {
+      throw new Error('Month must be between 1 and 12');
+    }
+
+    if (year < 1200 || year > 2199) {
+      throw new Error('Year must be between 1200 and 2199');
+    }
+
+    // Validate day/month combinations for solar dates
+    if (!isLunar) {
+      const maxDaysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+      let maxDays = maxDaysInMonth[month - 1];
+
+      // Handle leap years for February
+      if (month === 2) {
+        const isLeapYear = (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+        maxDays = isLeapYear ? 29 : 28;
+      }
+
+      if (day > maxDays) {
+        throw new Error(`Invalid date: ${day}/${month}/${year}. Month ${month} has only ${maxDays} days.`);
+      }
+    }
+
     if (isLunar) {
       this._lunarDate = new LunarDate(day, month, year, false, 0);
       this._solarDate = getSolarDate(day, month, year);

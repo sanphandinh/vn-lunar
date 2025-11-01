@@ -13,7 +13,7 @@ function findLunarDate(jd: number, ly: LunarDate[]): LunarDate {
   }
   
   let i = ly.length - 1;
-  while (jd < ly[i].jd) {
+  while (i >= 0 && jd < ly[i].jd) {
     i--;
   }
   
@@ -49,14 +49,21 @@ export function getSolarDate(day: number, month: number, year: number, leap: boo
   
   const ly = getYearInfo(year);
   let lm = ly[month - 1];
-  
-  if (lm.month !== month) {
+
+  if (lm.month !== month && month < ly.length) {
     lm = ly[month];
   }
   
   // Handle leap month
-  if (leap && month < ly.length) {
-    const leapMonth = ly.find(m => m.month === month && m.leap);
+  if (leap) {
+    // Use manual loop instead of find() for better performance
+    let leapMonth = null;
+    for (let i = 0; i < ly.length; i++) {
+      if (ly[i].month === month && ly[i].leap) {
+        leapMonth = ly[i];
+        break;
+      }
+    }
     if (leapMonth) {
       lm = leapMonth;
     }
