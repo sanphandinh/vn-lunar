@@ -160,6 +160,16 @@ semantic-release: node version ^22.14.0 || >= 24.10.0 is required
 - Update to latest Node.js: `nvm install 22 && nvm use 22`
 - Check semantic-release version compatibility
 
+#### 7. Semantic Release Authentication Issues
+```
+Error: Invalid npm token / Variable $owner of type String! was provided invalid value
+```
+**Solution**:
+- Verify NPM_TOKEN secret is properly configured in GitHub repository
+- Ensure the NPM token has publish permissions for @sanphandinh/vn-lunar
+- Check that GitHub token has proper permissions for releases
+- Use PR-based releases instead if semantic-release continues to fail
+
 #### 4. Version Conflicts
 ```
 Error: Version X.Y.Z already exists

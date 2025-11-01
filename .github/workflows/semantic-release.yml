@@ -14,6 +14,7 @@ jobs:
       with:
         fetch-depth: 0
         token: ${{ secrets.GITHUB_TOKEN }}
+        persist-credentials: true
 
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -33,9 +34,6 @@ jobs:
     - name: Install dependencies
       run: pnpm install
 
-    - name: Install semantic release dependencies
-      run: pnpm add -D semantic-release @semantic-release/git @semantic-release/github @semantic-release/npm
-
     - name: Run tests
       run: pnpm run pre-checks
 
@@ -43,7 +41,7 @@ jobs:
       run: pnpm run build
 
     - name: Semantic Release
-      run: npx semantic-release
+      run: pnpm dlx semantic-release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
