@@ -159,6 +159,15 @@ Error: Version X.Y.Z already exists
 - Check existing tags: `git tag`
 - Check npm registry: `npm view @sanphandinh/vn-lunar versions --json`
 
+#### 5. pnpm Lockfile Issues
+```
+ERR_PNPM_NO_LOCKFILE Cannot install with "frozen-lockfile" because pnpm-lock.yaml is absent
+```
+**Solution**:
+- Regenerate lockfile: `rm pnpm-lock.yaml && pnpm install`
+- Check pnpm version compatibility
+- Ensure lockfile is committed to git
+
 ### Recovery Commands
 ```bash
 # Reset to a known good state

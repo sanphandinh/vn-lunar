@@ -26,8 +26,12 @@ jobs:
       with:
         version: 8
 
+    - name: Configure npm registry
+      run: |
+        echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc
+
     - name: Install dependencies
-      run: pnpm install --frozen-lockfile
+      run: pnpm install
 
     - name: Install semantic release dependencies
       run: pnpm add -D semantic-release @semantic-release/git @semantic-release/github @semantic-release/npm

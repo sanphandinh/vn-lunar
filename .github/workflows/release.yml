@@ -28,8 +28,12 @@ jobs:
       with:
         version: 8
 
+    - name: Configure npm registry
+      run: |
+        echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc
+
     - name: Install dependencies
-      run: pnpm install --frozen-lockfile
+      run: pnpm install
 
     - name: Run tests
       run: pnpm run pre-checks
