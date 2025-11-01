@@ -1,5 +1,5 @@
 // src/core.ts
-import { CAN, CHI, FIRST_DAY, LAST_DAY } from './constants';
+import { CAN, CHI, FIRST_DAY, LAST_DAY, MONTH_CAN_TRI_MATRIX_BY_CAN_OF_YEAR, type MonthCanChiMatrix } from './constants';
 import { LunarDate } from './lunar-date';
 import { getYearInfo, jdn, jdn2date } from './utils';
 import type { SolarDateInfo } from './types';
@@ -89,9 +89,25 @@ export function getDayCanChi(jd: number): string {
 /**
  * Get Can Chi for a given month
  */
-export function getMonthCanChi(month: number, year: number): string {
+export function getMonthCanChi(lunarMonth: number, year: number): string {
+  // Validate inputs
+  if (lunarMonth < 1 || lunarMonth > 12 || year < 1200 || year > 2199) {
+    throw new Error(`Invalid lunar month: ${lunarMonth} or year: ${year}`);
+  }
+
+  // Get Can of the year (index 0-9)
   const yearCanIndex = (year + 6) % 10;
-  const monthCanIndex = (yearCanIndex * 2 + month) % 10;
-  const monthChiIndex = (month + 1) % 12;
-  return `${CAN[monthCanIndex]} ${CHI[monthChiIndex]}`;
+  const yearCan = CAN[yearCanIndex]; // Giáp, Ất, Bính, Đinh, Mậu, Kỷ, Canh, Tân, Nhâm, Quý
+
+  // Validate yearCan exists in the matrix
+  if (!MONTH_CAN_TRI_MATRIX_BY_CAN_OF_YEAR[yearCan]) {
+    throw new Error(`Year Can ${yearCan} not found in MONTH_CAN_TRI_MATRIX_BY_CAN_OF_YEAR`);
+  }
+
+  // Get CAN and CHI for the given lunar month
+  // Arrays are 0-based, so lunarMonth-1 gives us the correct index
+  const monthCan = MONTH_CAN_TRI_MATRIX_BY_CAN_OF_YEAR[yearCan].CAN[lunarMonth - 1];
+  const monthChi = MONTH_CAN_TRI_MATRIX_BY_CAN_OF_YEAR[yearCan].CHI[lunarMonth - 1];
+
+  return `${monthCan} ${monthChi}`;
 }

@@ -1,17 +1,17 @@
 {
-  "name": "@dqcai/vn-lunar",
-  "version": "1.0.1",
+  "name": "@sanphandinh/vn-lunar",
+  "version": "1.0.0",
   "type": "module",
-  "description": "Vietnamese Lunar Calendar Library - TypeScript implementation",
+  "description": "Vietnamese Lunar Calendar Library with typescript implementation that allow calculating lunar dates, festivals, and astrology information",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "module": "lib/index.mjs",
   "exports": {
     ".": {
       "types": "./lib/index.d.ts",
+      "browser": "./lib/index.umd.js",
       "import": "./lib/index.mjs",
-      "require": "./lib/index.js",
-      "browser": "./lib/index.umd.js"
+      "require": "./lib/index.js"
     }
   },
   "typesVersions": {
@@ -36,72 +36,57 @@
   "scripts": {
     "build": "rollup -c rollup.config.js",
     "clean": "rimraf lib",
-    "prebuild": "npm run clean",
+    "prebuild": "npm run clean && npm run type-check",
     "obfuscate": "node ./scripts/obfuscate.mjs",
     "prepublishOnly": "npm run build && npm run obfuscate",
-    "release": "npm publish --access public"
+    "release": "npm publish --access public",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
+    "type-check": "tsc --noEmit",
+    "pre-checks": "npm run type-check && npm test"
   },
   "keywords": [
     "vn-lunar",
-    "dqcai",
-    "doanquoccuong",
-    "cuongdq",
     "node",
     "browser",
-    "deno",
-    "bun",
-    "react-native",
-    "expo",
-    "universal",
     "vietnamese",
     "lunar",
     "calendar",
-    "vietnam",
-    "solar",
-    "date",
-    "conversion",
-    "lunar",
-    "calendar",
-    "typescript",
-    "vietnam",
-    "solar",
-    "date",
     "âm-lịch",
     "dương-lịch",
     "can-chi",
     "tết",
     "festival",
-    "astrology",
-    "frontend",
-    "backend",
-    "nodejs",
-    "browser",
-    "typescript"
+    "astrology"
   ],
-  "author": "Đoàn Quốc Cường",
+  "author": "San Phan Đình",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cuongdqpayment/dqcai-vn-lunar.git"
+    "url": "https://github.com/sanphandinh/vn-lunar.git"
   },
   "bugs": {
-    "url": "https://github.com/cuongdqpayment/dqcai-vn-lunar/issues"
+    "url": "https://github.com/sanphandinh/vn-lunar/issues"
   },
-  "homepage": "https://github.com/cuongdqpayment/dqcai-vn-lunar#readme",
+  "homepage": "https://github.com/sanphandinh/vn-lunar#readme",
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.6",
     "@rollup/plugin-node-resolve": "^16.0.1",
     "@rollup/plugin-typescript": "^12.1.4",
     "@types/node": "^18.0.0",
+    "@vitest/coverage-v8": "^4.0.3",
+    "@vitest/ui": "^4.0.3",
     "esbuild": "^0.25.9",
     "javascript-obfuscator": "^4.1.1",
     "obfuscate": "^0.0.11",
     "rimraf": "^6.0.1",
     "rollup": "^4.49.0",
     "rollup-plugin-esbuild": "^6.2.1",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "vitest": "^4.0.3"
   },
-  "peerDependencies": {},
   "overrides": {
     "glob": "^11.0.3",
     "rimraf": "^6.0.1"
