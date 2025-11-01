@@ -408,16 +408,16 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 ```bash
 git clone https://github.com/sanphandinh/vn-lunar
 cd vn-lunar
-npm install
-npm run dev
+pnpm install
+pnpm run build
 ```
 
 ### **Running Tests**
 
 ```bash
-npm test              # Run all tests (128 tests)
-npm run test:watch    # Watch mode for development
-npm run test:coverage # Coverage report (100% coverage)
+pnpm test              # Run all tests (128 tests)
+pnpm run test:watch    # Watch mode for development
+pnpm run test:coverage # Coverage report (100% coverage)
 ```
 
 ### **Quality Assurance**

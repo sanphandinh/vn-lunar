@@ -7,6 +7,7 @@ This guide will help you set up the automated npm publishing workflow for your V
 - ✅ GitHub repository already exists
 - ✅ NPM account created
 - ✅ Admin access to the GitHub repository
+- ✅ **pnpm** installed locally (`npm install -g pnpm`)
 
 ## 🎯 Step 1: Generate NPM Token
 
@@ -43,11 +44,13 @@ You should now see:
 
 ## ✅ Step 3: Verify Setup
 
-### 3.1 Test with a Dry Run
+### 3.1 Test Package Contents
 ```bash
 # In your local repository
-npm run build
-npm pack --dry-run  # Should show package contents without errors
+pnpm run build
+pnpm pack  # Creates tarball and shows what will be published
+# Verify the output shows expected files, then clean up
+rm *.tgz
 ```
 
 ### 3.2 Create Test Release Branch
@@ -102,6 +105,18 @@ npm login
 ### 5.2 Verify Package Info
 ```bash
 npm view @sanphandinh/vn-lunar
+```
+
+### 5.3 Test Local Development with pnpm
+```bash
+# Install dependencies
+pnpm install
+
+# Run tests
+pnpm test
+
+# Build project
+pnpm build
 ```
 
 ## 📋 Troubleshooting
