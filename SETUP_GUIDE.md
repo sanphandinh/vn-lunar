@@ -7,7 +7,8 @@ This guide will help you set up the automated npm publishing workflow for your V
 - ✅ GitHub repository already exists
 - ✅ NPM account created
 - ✅ Admin access to the GitHub repository
-- ✅ **pnpm** installed locally (`npm install -g pnpm`)
+- ✅ **Node.js 20+** installed locally
+- ✅ **pnpm 8+** installed locally (`npm install -g pnpm`)
 
 ## 🎯 Step 1: Generate NPM Token
 
