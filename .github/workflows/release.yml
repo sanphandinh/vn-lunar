@@ -41,16 +41,25 @@ jobs:
     - name: Build project
       run: pnpm run build
 
-    - name: Extract version from branch name
+    - name: Extract and validate version from branch name
       id: extract_version
+      env:
+        BRANCH_NAME: ${{ github.head_ref }}
       run: |
-        BRANCH_NAME="${{ github.head_ref }}"
-        VERSION=${BRANCH_NAME#release/}
-        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        VERSION="${BRANCH_NAME#release/}"
+
+        if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$ ]]; then
+          echo "Invalid release version in branch name: $BRANCH_NAME"
+          exit 1
+        fi
+
+        echo "version=$VERSION" >> "$GITHUB_OUTPUT"
         echo "Extracted version: $VERSION"
 
     - name: Update package.json version
-      run: pnpm version ${{ steps.extract_version.outputs.version }} --no-git-tag-version
+      env:
+        VERSION: ${{ steps.extract_version.outputs.version }}
+      run: pnpm version "$VERSION" --no-git-tag-version
 
     - name: Create git tag and push
       run: |
